@@ -1,3 +1,5 @@
+![](https://github.com/garf/godot-2d-game-template/repository-open-graph-template.png "Godot 2D Game Template")
+
 # Godot 2D Game Template
 
 A comprehensive template for creating 2D games with Godot 4.5. This template provides a solid foundation with organized project structure, built-in systems, and best practices for game development.
