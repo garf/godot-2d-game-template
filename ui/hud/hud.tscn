@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bvhq6von37ev5"]
+[gd_scene load_steps=3 format=3 uid="uid://bvhq6von37ev5"]
 
 [ext_resource type="Script" uid="uid://cx45gtwqf7jtu" path="res://ui/hud/hud.gd" id="1_xmswo"]
+[ext_resource type="Theme" uid="uid://cpmjvdknomyps" path="res://ui/theme.tres" id="2_4d6w6"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_xmswo")
@@ -29,5 +30,6 @@ text = "Ammo:"
 
 [node name="AmmoValue" type="Label" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
+theme = ExtResource("2_4d6w6")
 theme_override_colors/font_color = Color(0.120000005, 1, 0.19333327, 1)
 text = "322"
