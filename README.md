@@ -42,8 +42,8 @@ godot-2d-game-template/
 ├── localization/          # Translation files
 ├── shaders/               # Custom shaders
 └── ui/                    # 🟣 User interface components
-    ├── hud/               # Heads-up display
-    └── theme.tres         # UI theme
+	├── hud/               # Heads-up display
+	└── theme.tres         # UI theme
 ```
 
 ## 🚀 Getting Started
@@ -65,7 +65,7 @@ godot-2d-game-template/
    ```bash
    # Remove the existing git history
    rm -rf .git
-   
+
    # Initialize your own repository
    git init
    git add .
@@ -137,9 +137,9 @@ SfxPlayer.play_sfx(SfxDb.Keys.JUMP)
 2. Add the enum key to `db/view_db.gd`:
    ```gdscript
    enum Keys {
-       LOADING,
-       GAME,
-       YOUR_NEW_VIEW,  # Add here
+	   LOADING,
+	   GAME,
+	   YOUR_NEW_VIEW,  # Add here
    }
    ```
 3. Add the scene path to `VIEW_SCENE_PATHS`
