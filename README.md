@@ -1,2 +1,3 @@
 # godot-2d-game-template
-Template for 2D game
+
+Template for 2D game for Godot 4.5

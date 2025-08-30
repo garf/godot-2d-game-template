@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://b1ftws6ux4yyh"]
+[gd_scene load_steps=7 format=3 uid="uid://b1ftws6ux4yyh"]
 
 [ext_resource type="Script" uid="uid://78eyodqyonsj" path="res://game/views/game_view/game_view.gd" id="1_ao17y"]
 [ext_resource type="Texture2D" uid="uid://bnjfa6pqjdjys" path="res://assets/art/turrets/turret.png" id="1_ul5lt"]
+[ext_resource type="PackedScene" uid="uid://bvhq6von37ev5" path="res://ui/hud/hud.tscn" id="3_b8ey2"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ao17y"]
 load_path = "res://.godot/imported/turret.png-b0e5047aeb5021b2d33e20dbf959c2fd.ctex"
@@ -25,3 +26,5 @@ texture = SubResource("AtlasTexture_b8ey2")
 
 [node name="Turret" type="Sprite2D" parent="Turret"]
 texture = SubResource("AtlasTexture_4oif3")
+
+[node name="HUD" parent="." instance=ExtResource("3_b8ey2")]
