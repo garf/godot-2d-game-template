@@ -1,4 +1,4 @@
-![](https://github.com/garf/godot-2d-game-template/repository-open-graph-template.png "Godot 2D Game Template")
+![Godot 2D Game Template](https://github.com/garf/godot-2d-game-template/repository-open-graph-template.png)
 
 # Godot 2D Game Template
 
