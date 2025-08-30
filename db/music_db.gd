@@ -2,16 +2,16 @@ class_name MusicDb
 
 
 enum Keys {
-	DUSK_MATTER,
+	DAISY_DANCE,
 }
 
 static var ALL_KEYS: Array[Keys] = [
-	Keys.DUSK_MATTER,
+	Keys.DAISY_DANCE,
 ]
 
 
 const MUSIC_RESOURCE_PATHS := {
-	Keys.DUSK_MATTER: 'res://assets/audio/music/dusk_matter.mp3',
+	Keys.DAISY_DANCE: 'res://assets/audio/music/daisy_dance.mp3',
 }
 
 

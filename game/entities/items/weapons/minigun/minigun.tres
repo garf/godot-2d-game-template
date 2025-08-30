@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="WeaponRes" load_steps=4 format=3 uid="uid://bvwmgili1fbvq"]
+
+[ext_resource type="Script" uid="uid://cpylwwt6o6bxo" path="res://game/entities/items/weapons/weapon_res.gd" id="1_5ptx5"]
+[ext_resource type="Texture2D" uid="uid://cxclq70fy2i58" path="res://assets/art/weapon_icons.png" id="1_14ny5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p5u1o"]
+atlas = ExtResource("1_14ny5")
+region = Rect2(0, 0, 16, 16)
+
+[resource]
+script = ExtResource("1_5ptx5")
+item_description = "The longer you press the trigger, the faster it shoots. For the price of the preciseness"
+item_icon = SubResource("AtlasTexture_p5u1o")
+base_price = 300
+entity_name = "Minigun"
+metadata/_custom_type_script = "uid://cpylwwt6o6bxo"

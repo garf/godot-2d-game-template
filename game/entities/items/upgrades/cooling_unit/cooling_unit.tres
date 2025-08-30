@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="UpgradeRes" load_steps=4 format=3 uid="uid://cyjkf8o2bow4c"]
+
+[ext_resource type="Script" uid="uid://cgbjyny6n6exc" path="res://game/entities/items/upgrades/upgrade_res.gd" id="1_d2hs3"]
+[ext_resource type="Texture2D" uid="uid://cvj012ganh42g" path="res://assets/art/upgrade_icons.png" id="1_exj6x"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8b4tp"]
+atlas = ExtResource("1_exj6x")
+region = Rect2(0, 0, 16, 16)
+
+[resource]
+script = ExtResource("1_d2hs3")
+upgrade_type = 1
+item_description = "Reduces weapon cooldown"
+item_icon = SubResource("AtlasTexture_8b4tp")
+base_price = 300
+entity_name = "Cooling Unit"
+metadata/_custom_type_script = "uid://cgbjyny6n6exc"

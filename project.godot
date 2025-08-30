@@ -17,6 +17,8 @@ config/features=PackedStringArray("4.5", "Forward Plus")
 [autoload]
 
 Events="*res://globals/events.gd"
+MusicPlayer="*res://globals/music_player/music_player.tscn"
+SfxPlayer="*res://globals/sfx_player/sfx_player.tscn"
 
 [display]
 
