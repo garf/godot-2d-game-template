@@ -59,7 +59,7 @@ godot-2d-game-template/
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/godot-2d-game-template.git
+   git clone https://github.com/garf/godot-2d-game-template.git
    cd godot-2d-game-template
    ```
 
@@ -78,6 +78,8 @@ godot-2d-game-template/
    - Launch Godot 4.5
    - Click "Import" and select the project folder
    - The project will open with all systems ready to use
+
+Alternatively, use "Use this template" button in Github
 
 ## 🛠️ Core Systems
 
