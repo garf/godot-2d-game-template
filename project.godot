@@ -1,0 +1,44 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="GameTemplate"
+run/main_scene="uid://b0l0gl6bdakfc"
+config/features=PackedStringArray("4.5", "Forward Plus")
+
+[autoload]
+
+Events="*res://globals/events.gd"
+
+[display]
+
+window/size/viewport_width=960
+window/size/viewport_height=540
+window/size/mode=4
+window/size/initial_position_type=3
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep_height"
+
+[file_customization]
+
+folder_colors={
+"res://assets/": "orange",
+"res://db/": "green",
+"res://docs/": "gray",
+"res://game/": "yellow",
+"res://globals/": "pink",
+"res://ui/": "purple"
+}
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)

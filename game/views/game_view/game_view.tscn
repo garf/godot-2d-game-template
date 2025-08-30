@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://b1ftws6ux4yyh"]
+
+[ext_resource type="Script" uid="uid://78eyodqyonsj" path="res://game/views/game_view/game_view.gd" id="1_ao17y"]
+[ext_resource type="Texture2D" uid="uid://bnjfa6pqjdjys" path="res://assets/art/turrets/turret.png" id="1_ul5lt"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ao17y"]
+load_path = "res://.godot/imported/turret.png-b0e5047aeb5021b2d33e20dbf959c2fd.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b8ey2"]
+atlas = SubResource("CompressedTexture2D_ao17y")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4oif3"]
+atlas = ExtResource("1_ul5lt")
+region = Rect2(0, 0, 64, 64)
+
+[node name="GameView" type="Node2D"]
+script = ExtResource("1_ao17y")
+
+[node name="Turret" type="Node2D" parent="."]
+position = Vector2(478, 261)
+
+[node name="TurretBase" type="Sprite2D" parent="Turret"]
+texture = SubResource("AtlasTexture_b8ey2")
+
+[node name="Turret" type="Sprite2D" parent="Turret"]
+texture = SubResource("AtlasTexture_4oif3")

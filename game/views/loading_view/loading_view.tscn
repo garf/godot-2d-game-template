@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=3 uid="uid://dc347i7yjfrid"]
+
+[ext_resource type="Script" uid="uid://1mgnu84kkis1" path="res://game/views/loading_view/loading_view.gd" id="1_w2eqr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jrbhk"]
+bg_color = Color(0.09, 0.06648, 0.0396, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v4h18"]
+bg_color = Color(0.37, 0.30118, 0.1406, 1)
+
+[node name="LoadingView" type="CanvasLayer"]
+script = ExtResource("1_w2eqr")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="LoadedProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_jrbhk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_v4h18")
+value = 30.0
+
+[node name="LoadingText" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Loading..."
+horizontal_alignment = 1
+vertical_alignment = 1

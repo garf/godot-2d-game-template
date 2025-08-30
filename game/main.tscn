@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://b0l0gl6bdakfc"]
+
+[ext_resource type="Script" uid="uid://bq574spehhwbs" path="res://game/main.gd" id="1_oa506"]
+[ext_resource type="Script" uid="uid://dlbp4gq0fear1" path="res://helpers/view_loader/view_loader.gd" id="2_emt18"]
+[ext_resource type="Shader" uid="uid://c74rymj5uqwkw" path="res://shaders/vignette.gdshader" id="2_xtpaf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_emt18"]
+shader = ExtResource("2_xtpaf")
+shader_parameter/outerRadius = 1.0
+shader_parameter/MainAlpha = 1.0
+
+[node name="Main" type="Node"]
+script = ExtResource("1_oa506")
+
+[node name="ViewLoader" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_emt18")
+
+[node name="PostProcessing" type="CanvasLayer" parent="."]
+
+[node name="Vignette" type="ColorRect" parent="PostProcessing"]
+material = SubResource("ShaderMaterial_emt18")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://b7h5sc6xm08hc"]
+
+[ext_resource type="Script" uid="uid://dnj67yceick84" path="res://globals/sfx_player/sfx_player.gd" id="1_f6nyj"]
+
+[node name="SfxPlayer" type="Node"]
+process_mode = 3
+script = ExtResource("1_f6nyj")
+
+[node name="AudioStreamPlayer1" type="AudioStreamPlayer" parent="."]
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
+
+[node name="AudioStreamPlayer3" type="AudioStreamPlayer" parent="."]
+
+[node name="AudioStreamPlayer4" type="AudioStreamPlayer" parent="."]
+
+[node name="AudioStreamPlayer5" type="AudioStreamPlayer" parent="."]
+
+[node name="AudioStreamPlayer6" type="AudioStreamPlayer" parent="."]
