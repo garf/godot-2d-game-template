@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://b0l0gl6bdakfc"]
+[gd_scene format=3 uid="uid://b0l0gl6bdakfc"]
 
 [ext_resource type="Script" uid="uid://bq574spehhwbs" path="res://game/main.gd" id="1_oa506"]
 [ext_resource type="Script" uid="uid://dlbp4gq0fear1" path="res://helpers/view_loader/view_loader.gd" id="2_emt18"]
@@ -7,18 +7,18 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_emt18"]
 shader = ExtResource("2_xtpaf")
 shader_parameter/outerRadius = 1.0
-shader_parameter/MainAlpha = 1.0
+shader_parameter/MainAlpha = 0.6810000323475
 
-[node name="Main" type="Node"]
+[node name="Main" type="Node" unique_id=577680494]
 script = ExtResource("1_oa506")
 
-[node name="ViewLoader" type="Node" parent="."]
+[node name="ViewLoader" type="Node" parent="." unique_id=1876453109]
 unique_name_in_owner = true
 script = ExtResource("2_emt18")
 
-[node name="PostProcessing" type="CanvasLayer" parent="."]
+[node name="PostProcessing" type="CanvasLayer" parent="." unique_id=128169698]
 
-[node name="Vignette" type="ColorRect" parent="PostProcessing"]
+[node name="Vignette" type="ColorRect" parent="PostProcessing" unique_id=2024128585]
 material = SubResource("ShaderMaterial_emt18")
 anchors_preset = 15
 anchor_right = 1.0

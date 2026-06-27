@@ -1,19 +1,26 @@
-[gd_scene load_steps=5 format=3 uid="uid://b1ftws6ux4yyh"]
+[gd_scene format=4 uid="uid://b1ftws6ux4yyh"]
 
 [ext_resource type="Script" uid="uid://78eyodqyonsj" path="res://game/views/game_view/game_view.gd" id="1_ao17y"]
 [ext_resource type="Script" uid="uid://dfxftthagl1ry" path="res://game/managers/wallet_manager.gd" id="2_4oif3"]
-[ext_resource type="PackedScene" uid="uid://b48pqsokm8bvu" path="res://game/entities/items/turrets/turret/turret.tscn" id="3_4oif3"]
 [ext_resource type="PackedScene" uid="uid://bvhq6von37ev5" path="res://ui/hud/hud.tscn" id="3_b8ey2"]
+[ext_resource type="TileSet" uid="uid://boniaau7ima42" path="res://game/tilesets/forest_tileset.tres" id="4_4oif3"]
+[ext_resource type="PackedScene" uid="uid://ck5uni5kjq72" path="res://game/entities/characters/player/player.tscn" id="5_oa5ip"]
 
-[node name="GameView" type="Node2D"]
+[node name="GameView" type="Node2D" unique_id=1255291942]
 script = ExtResource("1_ao17y")
 
-[node name="Managers" type="Node" parent="."]
+[node name="Managers" type="Node" parent="." unique_id=621218599]
 
-[node name="WalletManager" type="Node" parent="Managers"]
+[node name="WalletManager" type="Node" parent="Managers" unique_id=1567270735]
 script = ExtResource("2_4oif3")
 
-[node name="Turret" parent="." instance=ExtResource("3_4oif3")]
-position = Vector2(478, 261)
+[node name="HUD" parent="." unique_id=937081481 instance=ExtResource("3_b8ey2")]
 
-[node name="HUD" parent="." instance=ExtResource("3_b8ey2")]
+[node name="ForestMap" type="TileMapLayer" parent="." unique_id=1169977204]
+tile_map_data = PackedByteArray("AAAFAA8AAAAAAAAAAAAGAA8AAAAAAAAAAAAHAA8AAAAAAAAAAAAIAA8AAAAAAAAAAAAJAA8AAAAAAAAAAAAKAA8AAAAAAAAAAAALAA8AAAAAAAAAAAAMAA8AAAAAAAAAAAANAA8AAAAAAAAAAAAOAA8AAAAAAAAAAAAPAA8AAAAAAAAAAAAQAA8AAAAAAAAAAAARAA8AAAAAAAAAAAASAA8AAAAAAAAAAAATAA8AAAAAAAAAAAAUAA8AAAAAAAAAAAAVAA8AAAAAAAAAAAAWAA8AAAAAAAAAAAAXAA8AAAAAAAAAAAAYAA8AAAAAAAAAAAAZAA8AAAAAAAAAAAAaAA8AAAAAAAAAAAAbAA8AAAAAAAAAAAAcAA8AAAAAAAAAAAAdAA8AAAAAAAAAAAAeAA8AAAAAAAAAAAAfAA8AAAAAAAAAAAAgAA8AAAAAAAAAAAAhAA8AAAAAAAAAAAAiAA8AAAAAAAAAAAAjAA8AAAAAAAAAAAAkAA8AAAAAAAAAAAAlAA8AAAAAAAAAAAAmAA8AAAAAAAAAAAAEAA8AAAABAAEAAAAnAA8AAAACAAEAAAALAA4AAAAFAAMAAAAPAA4AAAAFAAMAAAANAA4AAAAGAAMAAAATAA4AAAAEAAMAAAAdAA4AAAAEAAMAAAAfAA4AAAAGAAMAAAAhAA4AAAAEAAMAAAAHAA4AAAAKAAMAAAAEAA4AAAAFAAMAAAAYAA4AAAACAAMAAAAKAA4AAAABAAMAAAAFAA4AAAAGAAQAAAAXAA4AAAAGAAQAAAAUAA4AAAAIAAMAAAAkAA4AAAAEAAQAAAAmAA4AAAAKAAMAAAAFABAAAAABAAYAAAALABAAAAACAAYAAAARABAAAAAAAAYAAAAWABAAAAABAAYAAAAHABAAAAABAAYAAAAHABEAAAAAAAYAAAAKABMAAAACAAYAAAAQABIAAAADAAYAAAATABEAAAADAAYAAAAXABIAAAADAAYAAAAaABIAAAADAAYAAAAdABEAAAACAAYAAAAhABAAAAABAAYAAAAkABIAAAABAAYAAAAlABMAAAABAAYAAAAmABEAAAABAAYAAAAhABIAAAADAAYAAAAdABMAAAABAAYAAAAZABAAAAACAAYAAAAVABMAAAADAAYAAAA=")
+tile_set = ExtResource("4_4oif3")
+rendering_quadrant_size = 8
+physics_quadrant_size = 8
+
+[node name="Player" parent="." unique_id=1859496224 instance=ExtResource("5_oa5ip")]
+position = Vector2(50, 104)

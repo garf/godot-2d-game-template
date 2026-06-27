@@ -1,0 +1,166 @@
+[gd_scene format=3 uid="uid://ck5uni5kjq72"]
+
+[ext_resource type="Script" uid="uid://dsiv7tspf2eel" path="res://game/entities/characters/player/player.gd" id="1_ruxbf"]
+[ext_resource type="Texture2D" uid="uid://m4ubf65w3du2" path="res://assets/art/Heroes-Medium.png" id="2_cetcc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tmnli"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(256, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_46maa"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(608, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v00pc"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(624, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i1q82"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(640, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6f235"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(400, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yl4rs"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(416, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3dbij"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(400, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qktar"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hjinj"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fyn1c"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(208, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d65da"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(224, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cetcc"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dgpby"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_06c3x"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mragt"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ruxbf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tmnli")
+}],
+"loop": 1,
+"name": &"crouch_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_46maa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v00pc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i1q82")
+}],
+"loop": 0,
+"name": &"death_right",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6f235")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yl4rs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3dbij")
+}],
+"loop": 0,
+"name": &"hit_right",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qktar")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hjinj")
+}],
+"loop": 1,
+"name": &"idle_right",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fyn1c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d65da")
+}],
+"loop": 0,
+"name": &"jump_right",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cetcc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dgpby")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_06c3x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mragt")
+}],
+"loop": 1,
+"name": &"walk_right",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gmir5"]
+radius = 3.0
+
+[node name="Player" type="CharacterBody2D" unique_id=1859496224]
+collision_mask = 26
+script = ExtResource("1_ruxbf")
+
+[node name="PlayerSprites" type="AnimatedSprite2D" parent="." unique_id=1379412176]
+position = Vector2(0, -8)
+sprite_frames = SubResource("SpriteFrames_ruxbf")
+animation = &"hit_right"
+frame = 2
+frame_progress = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1979362243]
+position = Vector2(0, -3)
+shape = SubResource("CircleShape2D_gmir5")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=2032190179]
+zoom = Vector2(2, 2)
+position_smoothing_enabled = true
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
