@@ -5,8 +5,20 @@ class_name HudUi extends CanvasLayer
 
 func _enter_tree() -> void:
 	Events.WALLET_money_changed.connect(_on_money_changed)
+	Events.VIEW_view_loaded.connect(_on_view_loaded)
 
-func _ready() -> void:
+
+func _exit_tree() -> void:
+	if Events.WALLET_money_changed.is_connected(_on_money_changed):
+		Events.WALLET_money_changed.disconnect(_on_money_changed)
+	if Events.VIEW_view_loaded.is_connected(_on_view_loaded):
+		Events.VIEW_view_loaded.disconnect(_on_view_loaded)
+
+
+func _on_view_loaded(view: ViewDb.Keys) -> void:
+	if view != ViewDb.Keys.GAME:
+		return
+
 	Events.WALLET_sync_requested.emit()
 
 

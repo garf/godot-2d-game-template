@@ -162,7 +162,6 @@ position = Vector2(0, -3)
 shape = SubResource("CircleShape2D_gmir5")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2032190179]
-zoom = Vector2(2, 2)
-position_smoothing_enabled = true
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
+process_callback = 0

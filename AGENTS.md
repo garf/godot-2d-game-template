@@ -36,16 +36,16 @@ This file is the working map for agents touching this project. Keep it short, fa
 
 ## Runtime Flow
 
-- [game/main.tscn](game/main.tscn) is the root scene. It owns `Main`, `ViewLoader`, and vignette post-processing.
+- [game/main.tscn](game/main.tscn) is the root scene. It owns `Main`, `PixelViewportContainer`, `ViewLoader`, high-resolution `HUD`, and vignette post-processing.
+- `PixelViewportContainer` displays `WorldViewport`, which renders gameplay through `WorldRoot` at an effective 480x270 pixel-art resolution and integer-scales it to the window.
 - `Main` emits `Events.VIEW_load_view` on startup instead of instantiating the main view directly.
 - `Main` currently loads `ViewDb.Keys.GAME`.
-- `ViewLoader` listens to view events, owns a persistent `LoadingView`, uses `ResourceLoader.load_threaded_request`, and inserts the requested scene after loading completes.
+- `ViewLoader` listens to view events, owns a persistent high-resolution `LoadingView`, uses `ResourceLoader.load_threaded_request`, inserts the requested gameplay scene into its configured content parent, and emits `Events.VIEW_view_loaded` after insertion.
 - Current registered views live in [db/view_db.gd](db/view_db.gd):
   - `LOADING`
   - `GAME`
-- `GameView` currently owns gameplay-local managers and UI:
+- `GameView` currently owns gameplay-local managers and world content:
   - `Managers/WalletManager`
-  - `HUD`
   - `ForestMap`
   - `Player`
 
@@ -60,6 +60,7 @@ This file is the working map for agents touching this project. Keep it short, fa
 - These are the only current event domains.
 - Prefer adding a domain-specific signal to `Events` for decoupled communication instead of hard references between unrelated nodes.
 - Wallet changes use wallet events: spend requests use `WALLET_money_spend_requested`, sync requests use `WALLET_sync_requested`, and UI sync uses `WALLET_money_changed`.
+- View loading completion uses `VIEW_view_loaded`; high-resolution UI that depends on gameplay-local managers should wait for this signal before requesting sync.
 
 ### DB Registry Pattern
 
@@ -97,7 +98,7 @@ This file is the working map for agents touching this project. Keep it short, fa
 
 - Shared UI lives under `ui/`.
 - `ui/theme.tres` is the project-wide `Control` theme via `project.godot` and owns the default Pixel Operator font.
-- HUD is event-driven: it requests wallet sync on ready, then renders values from wallet events.
+- HUD is event-driven and lives outside the low-resolution gameplay viewport. It requests wallet sync after the game view reports loaded, then renders values from wallet events.
 
 ### Localization
 
