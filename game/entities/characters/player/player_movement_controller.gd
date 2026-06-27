@@ -29,6 +29,7 @@ var _slide_timer: float = 0.0
 var _coyote_timer: float = 0.0
 var _jump_buffer_timer: float = 0.0
 var _remaining_air_jumps: int = 0
+var _was_on_floor: bool = false
 
 @onready var _player: Player = get_parent() as Player
 
@@ -36,16 +37,18 @@ var _remaining_air_jumps: int = 0
 func physics_update(delta: float) -> void:
 	var input_axis: float = Input.get_axis("walk_left", "walk_right")
 	var on_floor: bool = _player.is_on_floor()
+	var just_landed: bool = on_floor and not _was_on_floor
 
 	_update_timers(delta, on_floor)
 	_update_facing(input_axis)
-	_update_crouch(delta, on_floor)
+	_update_crouch(delta, on_floor, just_landed)
 	_apply_horizontal_movement(input_axis, delta, on_floor)
 	_apply_jump()
 	_apply_gravity(delta)
 	_apply_jump_cut()
 
 	_player.move_and_slide()
+	_was_on_floor = on_floor
 
 
 func is_crouching() -> bool:
@@ -72,14 +75,15 @@ func _update_facing(input_axis: float) -> void:
 		_player.set_facing_sign(-1)
 
 
-func _update_crouch(delta: float, on_floor: bool) -> void:
+func _update_crouch(delta: float, on_floor: bool, just_landed: bool) -> void:
 	if not on_floor or not Input.is_action_pressed("crouch"):
 		_crouching = false
 		_stop_slide()
 		return
 
 	_crouching = true
-	if Input.is_action_just_pressed("crouch") and absf(_player.velocity.x) >= slide_min_start_speed:
+	var can_start_slide: bool = Input.is_action_just_pressed("crouch") or just_landed
+	if can_start_slide and absf(_player.velocity.x) >= slide_min_start_speed:
 		_sliding = true
 		_slide_timer = 0.0
 	elif _sliding:
