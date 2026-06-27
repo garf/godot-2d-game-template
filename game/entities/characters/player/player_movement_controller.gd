@@ -19,9 +19,13 @@ class_name PlayerMovementController extends Node
 @export var slide_speed_multiplier: float = 1.25
 @export var slide_min_start_speed: float = 20.0
 @export var slide_jump_velocity_multiplier: float = 1.15
+@export var slide_flat_time: float = 0.20
+@export var slide_slowdown_time: float = 0.35
+@export var slide_jump_bonus_end_offset: float = 0.08
 
 var _crouching: bool = false
 var _sliding: bool = false
+var _slide_timer: float = 0.0
 var _coyote_timer: float = 0.0
 var _jump_buffer_timer: float = 0.0
 var _remaining_air_jumps: int = 0
@@ -35,7 +39,7 @@ func physics_update(delta: float) -> void:
 
 	_update_timers(delta, on_floor)
 	_update_facing(input_axis)
-	_update_crouch(on_floor)
+	_update_crouch(delta, on_floor)
 	_apply_horizontal_movement(input_axis, delta, on_floor)
 	_apply_jump()
 	_apply_gravity(delta)
@@ -68,15 +72,20 @@ func _update_facing(input_axis: float) -> void:
 		_player.set_facing_sign(-1)
 
 
-func _update_crouch(on_floor: bool) -> void:
+func _update_crouch(delta: float, on_floor: bool) -> void:
 	if not on_floor or not Input.is_action_pressed("crouch"):
 		_crouching = false
-		_sliding = false
+		_stop_slide()
 		return
 
 	_crouching = true
 	if Input.is_action_just_pressed("crouch") and absf(_player.velocity.x) >= slide_min_start_speed:
 		_sliding = true
+		_slide_timer = 0.0
+	elif _sliding:
+		_slide_timer += delta
+		if _slide_timer >= _get_slide_duration():
+			_stop_slide()
 
 
 func _apply_horizontal_movement(input_axis: float, delta: float, on_floor: bool) -> void:
@@ -89,11 +98,22 @@ func _apply_horizontal_movement(input_axis: float, delta: float, on_floor: bool)
 
 func _get_speed_multiplier() -> float:
 	if _sliding:
-		return slide_speed_multiplier
+		return _get_slide_speed_multiplier()
 	if _crouching:
 		return crouch_speed_multiplier
 
 	return 1.0
+
+
+func _get_slide_speed_multiplier() -> float:
+	if _slide_timer <= slide_flat_time:
+		return slide_speed_multiplier
+	if slide_slowdown_time <= 0.0:
+		return crouch_speed_multiplier
+
+	var slowdown_elapsed: float = _slide_timer - slide_flat_time
+	var slowdown_progress: float = clampf(slowdown_elapsed / slide_slowdown_time, 0.0, 1.0)
+	return lerpf(slide_speed_multiplier, crouch_speed_multiplier, slowdown_progress)
 
 
 func _get_horizontal_acceleration(input_axis: float, target_speed: float, on_floor: bool) -> float:
@@ -118,14 +138,14 @@ func _apply_jump() -> void:
 		return
 
 	var next_jump_velocity: float = jump_velocity
-	if _sliding:
+	if _can_use_slide_jump_bonus():
 		next_jump_velocity *= slide_jump_velocity_multiplier
 
 	_player.velocity.y = next_jump_velocity
 	_jump_buffer_timer = 0.0
 	_coyote_timer = 0.0
 	_crouching = false
-	_sliding = false
+	_stop_slide()
 
 	if not can_use_ground_jump:
 		_remaining_air_jumps = maxi(_remaining_air_jumps - 1, 0)
@@ -147,3 +167,17 @@ func _apply_jump_cut() -> void:
 
 func _get_available_air_jumps() -> int:
 	return maxi(max_jumps - 1, 0)
+
+
+func _get_slide_duration() -> float:
+	return maxf(slide_flat_time + slide_slowdown_time, 0.0)
+
+
+func _can_use_slide_jump_bonus() -> bool:
+	var bonus_end_time: float = maxf(_get_slide_duration() - slide_jump_bonus_end_offset, 0.0)
+	return _sliding and _slide_timer < bonus_end_time
+
+
+func _stop_slide() -> void:
+	_sliding = false
+	_slide_timer = 0.0
