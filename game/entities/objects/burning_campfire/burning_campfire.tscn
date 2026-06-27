@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://cbwsdfypyp4if"]
+
+[ext_resource type="Script" uid="uid://b37n36f7b84m2" path="res://game/entities/objects/burning_campfire/burning_campfire.gd" id="1_x6b4a"]
+[ext_resource type="Script" uid="uid://d0ow66mrx2c4d" path="res://game/components/hitbox/hitbox_comp.gd" id="2_hitbox"]
+[ext_resource type="Texture2D" uid="uid://cai2s7fd0pm7c" path="res://assets/art/tiles/forest/Extras.png" id="2_x6b4a"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_x6b4a"]
+radius = 4.1231055
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_axufj"]
+atlas = ExtResource("2_x6b4a")
+region = Rect2(0, 32, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ge57u"]
+atlas = ExtResource("2_x6b4a")
+region = Rect2(8, 32, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xqdxh"]
+atlas = ExtResource("2_x6b4a")
+region = Rect2(16, 32, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x6b4a"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_axufj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ge57u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xqdxh")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 8.0
+}]
+
+[node name="BurningCampfire" type="Node2D" unique_id=2075658161]
+script = ExtResource("1_x6b4a")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 1
+script = ExtResource("2_hitbox")
+damage = 10.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1965249777]
+position = Vector2(0, 1)
+shape = SubResource("CircleShape2D_x6b4a")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=665599641]
+self_modulate = Color(1.8247963, 1.8247963, 1.8247963, 1)
+sprite_frames = SubResource("SpriteFrames_x6b4a")
+autoplay = "default"
+frame_progress = 0.5882298

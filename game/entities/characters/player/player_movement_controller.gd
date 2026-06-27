@@ -30,6 +30,7 @@ var _coyote_timer: float = 0.0
 var _jump_buffer_timer: float = 0.0
 var _remaining_air_jumps: int = 0
 var _was_on_floor: bool = false
+var _air_control_lock_timer: float = 0.0
 
 @onready var _player: Player = get_parent() as Player
 
@@ -37,19 +38,24 @@ var _was_on_floor: bool = false
 func physics_update(delta: float) -> void:
 	if _player.is_dead():
 		_clear_control_state()
-		_apply_gravity(delta)
-		_player.move_and_slide()
+		_apply_dead_movement(delta)
 		_was_on_floor = _player.is_on_floor()
 		return
 
 	var input_axis: float = Input.get_axis("walk_left", "walk_right")
+	var is_air_control_locked: bool = _air_control_lock_timer > 0.0
+	if _air_control_lock_timer > 0.0:
+		_air_control_lock_timer = maxf(_air_control_lock_timer - delta, 0.0)
+
 	var on_floor: bool = _player.is_on_floor()
 	var just_landed: bool = on_floor and not _was_on_floor
 
 	_update_timers(delta, on_floor)
-	_update_facing(input_axis)
+	if not is_air_control_locked:
+		_update_facing(input_axis)
 	_update_crouch(delta, on_floor, just_landed)
-	_apply_horizontal_movement(input_axis, delta, on_floor)
+	if not is_air_control_locked:
+		_apply_horizontal_movement(input_axis, delta, on_floor)
 	_apply_jump()
 	_apply_gravity(delta)
 	_apply_jump_cut()
@@ -60,6 +66,24 @@ func physics_update(delta: float) -> void:
 
 func is_crouching() -> bool:
 	return _crouching
+
+
+func start_hit_reaction(launch_velocity: Vector2, air_control_lock_time: float) -> void:
+	_clear_control_state()
+	_player.velocity = launch_velocity
+	_air_control_lock_timer = maxf(air_control_lock_time, 0.0)
+
+
+func _apply_dead_movement(delta: float) -> void:
+	if _player.is_on_floor() and _player.velocity.y >= 0.0:
+		_player.velocity = Vector2.ZERO
+		return
+
+	_apply_gravity(delta)
+	_player.move_and_slide()
+
+	if _player.is_on_floor():
+		_player.velocity = Vector2.ZERO
 
 
 func _update_timers(delta: float, on_floor: bool) -> void:
@@ -200,3 +224,4 @@ func _clear_control_state() -> void:
 	_coyote_timer = 0.0
 	_jump_buffer_timer = 0.0
 	_remaining_air_jumps = 0
+	_air_control_lock_timer = 0.0

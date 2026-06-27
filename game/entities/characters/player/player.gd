@@ -3,8 +3,13 @@ class_name Player extends CharacterBody2D
 
 signal facing_direction_changed(facing_direction: Vector2)
 
+const HIT_FLASH_TIME: float = 0.08
+const HIT_KNOCKBACK_VELOCITY: float = 240.0
+const HIT_AIR_CONTROL_LOCK_TIME: float = 0.16
+
 var facing_sign: int = 1
 var facing_direction: Vector2 = Vector2.RIGHT
+var _hit_flash_id: int = 0
 
 @onready var _sprite: AnimatedSprite2D = $PlayerSprites
 @onready var _movement_controller: PlayerMovementController = $MovementController
@@ -61,6 +66,17 @@ func receive_damage(amount: float) -> float:
 	return _vitals_controller.receive_damage(amount)
 
 
+func receive_hit(damage: float, source_position: Vector2, _hitbox: HitboxComp) -> void:
+	if is_dead():
+		return
+
+	var current_hp: float = receive_damage(damage)
+	if current_hp <= 0.0 or is_dead():
+		return
+
+	_play_hit_reaction(source_position)
+
+
 func die() -> void:
 	_vitals_controller.die()
 
@@ -82,6 +98,9 @@ func _sync_facing_visuals() -> void:
 
 
 func _update_animation() -> void:
+	if _sprite.animation == &"hit_right" and _sprite.is_playing():
+		return
+
 	var next_animation: StringName = &"idle_right"
 
 	if not is_on_floor():
@@ -94,11 +113,44 @@ func _update_animation() -> void:
 	_play_animation(next_animation)
 
 
-func _play_animation(animation: StringName) -> void:
-	if _sprite.animation == animation:
+func _play_animation(animation: StringName, force_restart: bool = false) -> void:
+	if _sprite.animation == animation and not force_restart:
 		return
 
 	_sprite.play(animation)
+
+
+func _play_hit_reaction(source_position: Vector2) -> void:
+	var away_sign: float = signf(global_position.x - source_position.x)
+	if is_zero_approx(away_sign):
+		away_sign = float(facing_sign)
+
+	_play_animation(&"hit_right", true)
+	_flash_hit_shader()
+	_movement_controller.start_hit_reaction(
+		Vector2(HIT_KNOCKBACK_VELOCITY * away_sign, -HIT_KNOCKBACK_VELOCITY),
+		HIT_AIR_CONTROL_LOCK_TIME
+	)
+
+
+func _flash_hit_shader() -> void:
+	_hit_flash_id += 1
+	var current_flash_id: int = _hit_flash_id
+	_set_hit_shader_active(true)
+
+	await get_tree().create_timer(HIT_FLASH_TIME).timeout
+	if current_flash_id != _hit_flash_id:
+		return
+
+	_set_hit_shader_active(false)
+
+
+func _set_hit_shader_active(active: bool) -> void:
+	var hit_material: ShaderMaterial = _sprite.material as ShaderMaterial
+	if hit_material == null:
+		return
+
+	hit_material.set_shader_parameter(&"active", active)
 
 
 func _stop_camera_following() -> void:
@@ -113,11 +165,14 @@ func _restore_camera_following() -> void:
 
 
 func _on_player_died() -> void:
-	_play_animation(&"death_right")
+	_set_hit_shader_active(false)
+	_play_animation(&"death_right", true)
 	_stop_camera_following()
 
 
 func _on_player_respawned(_global_position: Vector2) -> void:
+	_hit_flash_id += 1
+	_set_hit_shader_active(false)
 	_restore_camera_following()
 	_sync_facing_visuals()
-	_play_animation(&"idle_right")
+	_play_animation(&"idle_right", true)

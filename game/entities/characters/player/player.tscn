@@ -1,10 +1,17 @@
 [gd_scene format=3 uid="uid://ck5uni5kjq72"]
 
+[ext_resource type="Shader" uid="uid://0voujlm8s10c" path="res://shaders/hit.gdshader" id="1_06c3x"]
 [ext_resource type="Script" uid="uid://dsiv7tspf2eel" path="res://game/entities/characters/player/player.gd" id="1_ruxbf"]
 [ext_resource type="Texture2D" uid="uid://m4ubf65w3du2" path="res://assets/art/Heroes-Medium.png" id="2_cetcc"]
-[ext_resource type="Script" path="res://game/entities/characters/player/player_movement_controller.gd" id="3_8es8j"]
-[ext_resource type="Script" path="res://game/entities/characters/player/player_vitals_controller.gd" id="4_vitals"]
-[ext_resource type="Script" path="res://game/components/hp/hp_comp.gd" id="5_hp"]
+[ext_resource type="Script" uid="uid://dlbvgx2sokb4q" path="res://game/entities/characters/player/player_movement_controller.gd" id="3_8es8j"]
+[ext_resource type="Script" uid="uid://dbbq74owd33k" path="res://game/entities/characters/player/player_vitals_controller.gd" id="4_vitals"]
+[ext_resource type="Script" uid="uid://dsn5kmelwxa0x" path="res://game/components/hp/hp_comp.gd" id="5_hp"]
+[ext_resource type="Script" uid="uid://blg4ju5g6vxtp" path="res://game/components/hurtbox/hurtbox_comp.gd" id="6_hurtbox"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_06c3x"]
+shader = ExtResource("1_06c3x")
+shader_parameter/active = false
+shader_parameter/tint = Color(1, 0.39999998, 0.39999998, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tmnli"]
 atlas = ExtResource("2_cetcc")
@@ -148,28 +155,41 @@ animations = [{
 radius = 3.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1859496224]
-collision_mask = 26
+collision_mask = 58
 script = ExtResource("1_ruxbf")
 
 [node name="PlayerSprites" type="AnimatedSprite2D" parent="." unique_id=1379412176]
+material = SubResource("ShaderMaterial_06c3x")
 position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_ruxbf")
-animation = &"idle_right"
+animation = &"jump_right"
+autoplay = "idle_right"
 
-[node name="MovementController" type="Node" parent="."]
+[node name="MovementController" type="Node" parent="." unique_id=918236918]
 script = ExtResource("3_8es8j")
 
-[node name="VitalsController" type="Node" parent="."]
+[node name="VitalsController" type="Node" parent="." unique_id=1933421795]
 script = ExtResource("4_vitals")
 
-[node name="HpComp" type="Node" parent="VitalsController"]
+[node name="HpComp" type="Node" parent="VitalsController" unique_id=1091098576]
 script = ExtResource("5_hp")
+max_hp = 100.0
+hp = 100.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1979362243]
 position = Vector2(0, -3)
 shape = SubResource("CircleShape2D_gmir5")
 
+[node name="Hurtbox" type="Area2D" parent="." unique_id=937019263]
+collision_mask = 0
+script = ExtResource("6_hurtbox")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1444726122]
+position = Vector2(0, -3)
+shape = SubResource("CircleShape2D_gmir5")
+
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2032190179]
+process_callback = 0
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
-process_callback = 0
+drag_top_margin = 0.3

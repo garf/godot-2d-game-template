@@ -86,6 +86,7 @@ This file is the working map for agents touching this project. Keep it short, fa
 - Player locomotion uses composition: `Player` owns public facing/animation API, while a child `PlayerMovementController` owns velocity physics and `move_and_slide()`. Future directional gameplay should read `Player.facing_direction`, not sprite flip state.
 - Player vitals use composition: `PlayerVitalsController` owns HP and alive/dead state. Dead players keep gravity and `move_and_slide()` but ignore movement input.
 - `HpComp` is a reusable component with local `hp_changed` and `hp_depleted` signals.
+- Damage collision uses reusable `HitboxComp` and `HurtboxComp` Area2D components under `game/components/`. Hitboxes own damage/cooldown and call hurtboxes; hurtboxes forward hits to their damage receiver through `receive_hit(damage, source_position, hitbox)`. Keep object/player-specific reactions on the receiver, not in the shared components.
 
 ### Resources and Data
 
