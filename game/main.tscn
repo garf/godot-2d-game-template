@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://bq574spehhwbs" path="res://game/main.gd" id="1_oa506"]
 [ext_resource type="Script" uid="uid://dlbp4gq0fear1" path="res://helpers/view_loader/view_loader.gd" id="2_emt18"]
 [ext_resource type="Shader" uid="uid://c74rymj5uqwkw" path="res://shaders/vignette.gdshader" id="2_xtpaf"]
-[ext_resource type="PackedScene" uid="uid://bvhq6von37ev5" path="res://ui/hud/hud.tscn" id="3_hud"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_emt18"]
 shader = ExtResource("2_xtpaf")
@@ -13,26 +12,12 @@ shader_parameter/MainAlpha = 0.6810000323475
 [node name="Main" type="Node" unique_id=577680494]
 script = ExtResource("1_oa506")
 
-[node name="PixelViewportContainer" type="SubViewportContainer" parent="." unique_id=1127261833]
-unique_name_in_owner = true
-offset_right = 1920.0
-offset_bottom = 1080.0
-stretch = true
-stretch_shrink = 4
-
-[node name="WorldViewport" type="SubViewport" parent="PixelViewportContainer" unique_id=1136884389]
-unique_name_in_owner = true
-handle_input_locally = false
-size = Vector2i(480, 270)
-render_target_update_mode = 4
-
-[node name="WorldRoot" type="Node2D" parent="PixelViewportContainer/WorldViewport" unique_id=250654311]
-unique_name_in_owner = true
+[node name="ViewRoot" type="Node" parent="." unique_id=250654311]
 
 [node name="ViewLoader" type="Node" parent="." unique_id=1876453109]
 unique_name_in_owner = true
 script = ExtResource("2_emt18")
-content_parent_path = NodePath("../PixelViewportContainer/WorldViewport/WorldRoot")
+content_parent_path = NodePath("../ViewRoot")
 
 [node name="PostProcessing" type="CanvasLayer" parent="." unique_id=128169698]
 
@@ -45,5 +30,3 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="HUD" parent="." unique_id=937081481 instance=ExtResource("3_hud")]

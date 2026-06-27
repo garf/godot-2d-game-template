@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://bvhq6von37ev5"]
+
+[ext_resource type="Script" uid="uid://cx45gtwqf7jtu" path="res://game/views/game_view/hud/hud.gd" id="1_xmswo"]
+[ext_resource type="Theme" uid="uid://cpmjvdknomyps" path="res://ui/theme.tres" id="2_4d6w6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y7ipm"]
+bg_color = Color(0.19, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gd0s2"]
+bg_color = Color(1, 0.39999998, 0.39999998, 1)
+
+[node name="HUD" type="CanvasLayer" unique_id=1779715508]
+script = ExtResource("1_xmswo")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1265527050]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=2033111607]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="MoneyContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1042878137]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="MoneyLabel" type="Label" parent="MarginContainer/VBoxContainer/MoneyContainer" unique_id=2025347327]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.73, 0.73, 1)
+text = "Money:"
+
+[node name="MoneyValueLabel" type="Label" parent="MarginContainer/VBoxContainer/MoneyContainer" unique_id=286122974]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_4d6w6")
+theme_override_colors/font_color = Color(0.120000005, 1, 0.19333327, 1)
+text = "322"
+
+[node name="HPContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1959663120]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/separation = 30
+
+[node name="HpLabel" type="Label" parent="MarginContainer/VBoxContainer/HPContainer" unique_id=489628380]
+layout_mode = 2
+text = "HP:"
+
+[node name="HpProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HPContainer" unique_id=282068841]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 20)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_y7ipm")
+theme_override_styles/fill = SubResource("StyleBoxFlat_gd0s2")
+value = 30.0
+show_percentage = false
+
+[node name="DeadScreen" type="MarginContainer" parent="MarginContainer" unique_id=1930948440]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/DeadScreen" unique_id=384142564]
+custom_minimum_size = Vector2(600, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="MarginContainer/DeadScreen/PanelContainer" unique_id=311992942]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.39999998, 0.39999998, 1)
+theme_override_font_sizes/font_size = 50
+text = "Dead!"
+horizontal_alignment = 1
+vertical_alignment = 1
