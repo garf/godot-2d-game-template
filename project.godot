@@ -32,6 +32,7 @@ window/size/mode=4
 window/size/initial_position_type=3
 window/stretch/mode="canvas_items"
 window/stretch/aspect="keep_height"
+window/stretch/scale_mode="integer"
 
 [file_customization]
 

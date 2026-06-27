@@ -14,11 +14,17 @@ class_name PlayerMovementController extends Node
 @export var coyote_time: float = 0.10
 @export var jump_buffer_time: float = 0.10
 @export var jump_cut_multiplier: float = 0.45
+@export var max_jumps: int = 2
 @export var crouch_speed_multiplier: float = 0.45
+@export var slide_speed_multiplier: float = 1.25
+@export var slide_min_start_speed: float = 20.0
+@export var slide_jump_velocity_multiplier: float = 1.15
 
 var _crouching: bool = false
+var _sliding: bool = false
 var _coyote_timer: float = 0.0
 var _jump_buffer_timer: float = 0.0
+var _remaining_air_jumps: int = 0
 
 @onready var _player: Player = get_parent() as Player
 
@@ -45,6 +51,7 @@ func is_crouching() -> bool:
 func _update_timers(delta: float, on_floor: bool) -> void:
 	if on_floor:
 		_coyote_timer = coyote_time
+		_remaining_air_jumps = _get_available_air_jumps()
 	else:
 		_coyote_timer = maxf(_coyote_timer - delta, 0.0)
 
@@ -62,15 +69,31 @@ func _update_facing(input_axis: float) -> void:
 
 
 func _update_crouch(on_floor: bool) -> void:
-	_crouching = on_floor and Input.is_action_pressed("crouch")
+	if not on_floor or not Input.is_action_pressed("crouch"):
+		_crouching = false
+		_sliding = false
+		return
+
+	_crouching = true
+	if Input.is_action_just_pressed("crouch") and absf(_player.velocity.x) >= slide_min_start_speed:
+		_sliding = true
 
 
 func _apply_horizontal_movement(input_axis: float, delta: float, on_floor: bool) -> void:
-	var speed_multiplier: float = crouch_speed_multiplier if _crouching else 1.0
+	var speed_multiplier: float = _get_speed_multiplier()
 	var target_speed: float = input_axis * max_walk_speed * speed_multiplier
 	var acceleration: float = _get_horizontal_acceleration(input_axis, target_speed, on_floor)
 
 	_player.velocity.x = move_toward(_player.velocity.x, target_speed, acceleration * delta)
+
+
+func _get_speed_multiplier() -> float:
+	if _sliding:
+		return slide_speed_multiplier
+	if _crouching:
+		return crouch_speed_multiplier
+
+	return 1.0
 
 
 func _get_horizontal_acceleration(input_axis: float, target_speed: float, on_floor: bool) -> float:
@@ -85,13 +108,27 @@ func _get_horizontal_acceleration(input_axis: float, target_speed: float, on_flo
 
 
 func _apply_jump() -> void:
-	if _jump_buffer_timer <= 0.0 or _coyote_timer <= 0.0 or _crouching:
+	if _jump_buffer_timer <= 0.0 or max_jumps <= 0:
+		return
+	if _crouching and not _sliding:
 		return
 
-	_player.velocity.y = jump_velocity
+	var can_use_ground_jump: bool = _coyote_timer > 0.0
+	if not can_use_ground_jump and _remaining_air_jumps <= 0:
+		return
+
+	var next_jump_velocity: float = jump_velocity
+	if _sliding:
+		next_jump_velocity *= slide_jump_velocity_multiplier
+
+	_player.velocity.y = next_jump_velocity
 	_jump_buffer_timer = 0.0
 	_coyote_timer = 0.0
 	_crouching = false
+	_sliding = false
+
+	if not can_use_ground_jump:
+		_remaining_air_jumps = maxi(_remaining_air_jumps - 1, 0)
 
 
 func _apply_gravity(delta: float) -> void:
@@ -106,3 +143,7 @@ func _apply_gravity(delta: float) -> void:
 func _apply_jump_cut() -> void:
 	if Input.is_action_just_released("jump") and _player.velocity.y < 0.0:
 		_player.velocity.y *= jump_cut_multiplier
+
+
+func _get_available_air_jumps() -> int:
+	return maxi(max_jumps - 1, 0)
