@@ -23,8 +23,13 @@ class_name PlayerMovementController extends Node
 @export var slide_slowdown_time: float = 0.35
 @export var slide_jump_bonus_end_offset: float = 0.08
 @export var hit_launch_strength: float = 240.0
+@export var climb_speed: float = 70.0
+@export var climb_detach_horizontal_speed: float = 120.0
+@export var climb_probe_offset: Vector2 = Vector2(0.0, -4.0)
 
 var _crouching: bool = false
+var _climbing: bool = false
+var _climb_moving: bool = false
 var _sliding: bool = false
 var _slide_timer: float = 0.0
 var _coyote_timer: float = 0.0
@@ -53,6 +58,7 @@ func physics_update(delta: float) -> void:
 		_hit_air_control_was_airborne = false
 
 	var input_axis: float = Input.get_axis("walk_left", "walk_right")
+	var climb_axis: float = Input.get_axis("move_up", "move_down")
 
 	_update_timers(delta, on_floor)
 	if _can_unlock_hit_air_control_for_jump(on_floor):
@@ -60,6 +66,20 @@ func physics_update(delta: float) -> void:
 
 	if not _hit_air_control_locked:
 		_update_facing(input_axis)
+		_update_climb_state(climb_axis)
+		if _climbing and not is_zero_approx(input_axis):
+			_detach_from_climb(input_axis)
+
+	if _climbing:
+		_apply_climb_movement(climb_axis, delta)
+		_apply_jump()
+		_apply_jump_cut()
+		_player.move_and_slide()
+		if _player.is_on_floor() and climb_axis >= 0.0:
+			_stop_climb()
+		_was_on_floor = on_floor
+		return
+
 	_update_crouch(delta, on_floor, just_landed)
 	if not _hit_air_control_locked:
 		_apply_horizontal_movement(input_axis, delta, on_floor)
@@ -73,6 +93,14 @@ func physics_update(delta: float) -> void:
 
 func is_crouching() -> bool:
 	return _crouching
+
+
+func is_climbing() -> bool:
+	return _climbing
+
+
+func is_climbing_moving() -> bool:
+	return _climb_moving
 
 
 func start_hit_reaction(launch_direction_sign: float) -> void:
@@ -172,10 +200,71 @@ func _get_horizontal_acceleration(input_axis: float, target_speed: float, on_flo
 	return ground_acceleration if on_floor else air_acceleration
 
 
+func _update_climb_state(climb_axis: float) -> void:
+	if _climbing:
+		if not _is_on_climbable_tile():
+			_stop_climb()
+		return
+
+	if is_zero_approx(climb_axis) or not _is_on_climbable_tile():
+		return
+
+	_start_climb()
+
+
+func _start_climb() -> void:
+	_climbing = true
+	_climb_moving = false
+	_crouching = false
+	_stop_slide()
+	_coyote_timer = 0.0
+	_player.velocity = Vector2.ZERO
+
+
+func _stop_climb() -> void:
+	_climbing = false
+	_climb_moving = false
+
+
+func _detach_from_climb(horizontal_axis: float) -> void:
+	_stop_climb()
+	_coyote_timer = coyote_time
+	_remaining_air_jumps = _get_available_air_jumps()
+	_player.velocity.x = horizontal_axis * climb_detach_horizontal_speed
+	_player.velocity.y = 0.0
+
+
+func _apply_climb_movement(climb_axis: float, delta: float) -> void:
+	var climb_map: LevelTileMap = _player.get_climb_map()
+	if climb_map == null:
+		_stop_climb()
+		return
+
+	var climb_tile_center: Vector2 = climb_map.get_climb_tile_center_at_world_position(_get_climb_probe_position())
+	var climb_velocity: float = climb_axis * climb_speed
+	if climb_axis < 0.0 and not climb_map.is_climbable_at_world_position(
+		_get_climb_probe_position() + Vector2(0.0, climb_velocity * delta)
+	):
+		climb_velocity = 0.0
+
+	_player.global_position.x = climb_tile_center.x
+	_player.velocity.x = 0.0
+	_player.velocity.y = climb_velocity
+	_climb_moving = not is_zero_approx(climb_velocity)
+
+
 func _apply_jump() -> void:
 	if _jump_buffer_timer <= 0.0 or max_jumps <= 0:
 		return
 	if _crouching and not _sliding:
+		return
+
+	if _climbing:
+		_player.velocity.y = jump_velocity
+		_jump_buffer_timer = 0.0
+		_coyote_timer = 0.0
+		_remaining_air_jumps = _get_available_air_jumps()
+		_stop_climb()
 		return
 
 	var can_use_ground_jump: bool = _coyote_timer > 0.0
@@ -238,6 +327,15 @@ func _can_unlock_hit_air_control_for_jump(on_floor: bool) -> bool:
 	return _remaining_air_jumps > 0
 
 
+func _is_on_climbable_tile() -> bool:
+	var climb_map: LevelTileMap = _player.get_climb_map()
+	return climb_map != null and climb_map.is_climbable_at_world_position(_get_climb_probe_position())
+
+
+func _get_climb_probe_position() -> Vector2:
+	return _player.global_position + climb_probe_offset
+
+
 func _stop_slide() -> void:
 	_sliding = false
 	_slide_timer = 0.0
@@ -245,6 +343,7 @@ func _stop_slide() -> void:
 
 func _clear_control_state() -> void:
 	_crouching = false
+	_stop_climb()
 	_stop_slide()
 	_coyote_timer = 0.0
 	_jump_buffer_timer = 0.0

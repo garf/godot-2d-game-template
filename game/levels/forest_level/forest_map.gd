@@ -1,4 +1,4 @@
-class_name ForestMap extends TileMapLayer
+class_name ForestMap extends LevelTileMap
 
 @onready var _kill_zone: Area2D = %KillZone
 

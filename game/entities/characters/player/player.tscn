@@ -197,7 +197,7 @@ position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_ruxbf")
 animation = &"climb"
 autoplay = "idle_right"
-frame_progress = 0.2731945
+frame_progress = 0.4559991
 
 [node name="MovementController" type="Node" parent="." unique_id=918236918]
 script = ExtResource("3_8es8j")

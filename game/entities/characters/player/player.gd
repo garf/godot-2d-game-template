@@ -5,6 +5,8 @@ signal facing_direction_changed(facing_direction: Vector2)
 
 const HIT_FLASH_TIME: float = 0.1
 
+@export var climb_map_path: NodePath
+
 var facing_sign: int = 1
 var facing_direction: Vector2 = Vector2.RIGHT
 var _hit_flash_id: int = 0
@@ -13,6 +15,7 @@ var _hit_flash_id: int = 0
 @onready var _movement_controller: PlayerMovementController = $MovementController
 @onready var _vitals_controller: PlayerVitalsController = $VitalsController
 @onready var _camera: Camera2D = $Camera2D
+@onready var _climb_map: LevelTileMap = _get_climb_map_from_path()
 
 
 func _enter_tree() -> void:
@@ -91,6 +94,10 @@ func is_dead() -> bool:
 	return _vitals_controller.is_dead()
 
 
+func get_climb_map() -> LevelTileMap:
+	return _climb_map
+
+
 func _sync_facing_visuals() -> void:
 	_sprite.flip_h = facing_sign < 0
 
@@ -101,7 +108,10 @@ func _update_animation() -> void:
 
 	var next_animation: StringName = &"idle_right"
 
-	if not is_on_floor():
+	if _movement_controller.is_climbing():
+		_update_climb_animation()
+		return
+	elif not is_on_floor():
 		next_animation = &"jump_right"
 	elif _movement_controller.is_crouching():
 		next_animation = &"crouch_right"
@@ -109,6 +119,15 @@ func _update_animation() -> void:
 		next_animation = &"walk_right"
 
 	_play_animation(next_animation)
+
+
+func _update_climb_animation() -> void:
+	_play_animation(&"climb")
+	if _movement_controller.is_climbing_moving():
+		if not _sprite.is_playing():
+			_sprite.play(&"climb")
+	else:
+		_sprite.pause()
 
 
 func _play_animation(animation: StringName, force_restart: bool = false) -> void:
@@ -146,6 +165,13 @@ func _set_hit_shader_active(active: bool) -> void:
 		return
 
 	hit_material.set_shader_parameter(&"active", active)
+
+
+func _get_climb_map_from_path() -> LevelTileMap:
+	if climb_map_path == NodePath():
+		return null
+
+	return get_node_or_null(climb_map_path) as LevelTileMap
 
 
 func _stop_camera_following() -> void:
