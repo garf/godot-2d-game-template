@@ -11,7 +11,23 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_06c3x"]
 shader = ExtResource("1_06c3x")
 shader_parameter/active = false
-shader_parameter/tint = Color(1, 0.39999998, 0.39999998, 1)
+shader_parameter/tint = Color(2.4168243, 0.75332177, 0.75332177, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sqkjh"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(320, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_24ox0"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(336, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f5aje"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(352, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_63exr"]
+atlas = ExtResource("2_cetcc")
+region = Rect2(368, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tmnli"]
 atlas = ExtResource("2_cetcc")
@@ -75,6 +91,23 @@ region = Rect2(96, 0, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ruxbf"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sqkjh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_24ox0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f5aje")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_63exr")
+}],
+"loop": 1,
+"name": &"climb",
+"speed": 8.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_tmnli")
@@ -162,8 +195,9 @@ script = ExtResource("1_ruxbf")
 material = SubResource("ShaderMaterial_06c3x")
 position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_ruxbf")
-animation = &"jump_right"
+animation = &"climb"
 autoplay = "idle_right"
+frame_progress = 0.2731945
 
 [node name="MovementController" type="Node" parent="." unique_id=918236918]
 script = ExtResource("3_8es8j")

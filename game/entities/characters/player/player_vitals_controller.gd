@@ -49,12 +49,12 @@ func die() -> void:
 	Events.PLAYER_died.emit()
 
 
-func respawn(global_position: Vector2) -> void:
+func respawn(spawn_global_position: Vector2) -> void:
 	state = State.ALIVE
-	_player.global_position = global_position
+	_player.global_position = spawn_global_position
 	_player.velocity = Vector2.ZERO
 	_hp_comp.heal_full()
-	Events.PLAYER_respawned.emit(global_position)
+	Events.PLAYER_respawned.emit(spawn_global_position)
 
 
 func is_alive() -> bool:
@@ -73,8 +73,8 @@ func _on_death_requested() -> void:
 	die()
 
 
-func _on_respawn_requested(global_position: Vector2) -> void:
-	respawn(global_position)
+func _on_respawn_requested(spawn_global_position: Vector2) -> void:
+	respawn(spawn_global_position)
 
 
 func _on_view_loaded(view: ViewDb.Keys) -> void:

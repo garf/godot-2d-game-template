@@ -124,6 +124,7 @@ This file is the working map for agents touching this project. Keep it short, fa
 - Also try to keep the system consistent.
 - But also, don't overengineer. Try to keep the great balance between ideal code and amount of changes.
 - Prefer explicit type annotations for variables, constants, function arguments, return values, arrays, dictionaries, and node lookups. Avoid relying on inferred types; only break this rule for highly specific cases where explicit typing clearly makes the code worse.
+- Never name local variables or function parameters after properties or methods declared by a parent class, such as `global_position` on `Node2D`; use a more specific name like `spawn_global_position`.
 - Prefer composition over inheritance in most cases, except the places where inheritance is already an established approach.
 
 ## Verification Expectations

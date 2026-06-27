@@ -59,6 +59,7 @@ text = "HP:"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 20)
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_styles/background = SubResource("StyleBoxFlat_y7ipm")
 theme_override_styles/fill = SubResource("StyleBoxFlat_gd0s2")
 value = 30.0

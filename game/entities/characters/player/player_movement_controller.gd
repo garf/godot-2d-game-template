@@ -22,6 +22,7 @@ class_name PlayerMovementController extends Node
 @export var slide_flat_time: float = 0.20
 @export var slide_slowdown_time: float = 0.35
 @export var slide_jump_bonus_end_offset: float = 0.08
+@export var hit_launch_strength: float = 240.0
 
 var _crouching: bool = false
 var _sliding: bool = false
@@ -30,7 +31,8 @@ var _coyote_timer: float = 0.0
 var _jump_buffer_timer: float = 0.0
 var _remaining_air_jumps: int = 0
 var _was_on_floor: bool = false
-var _air_control_lock_timer: float = 0.0
+var _hit_air_control_locked: bool = false
+var _hit_air_control_was_airborne: bool = false
 
 @onready var _player: Player = get_parent() as Player
 
@@ -42,19 +44,24 @@ func physics_update(delta: float) -> void:
 		_was_on_floor = _player.is_on_floor()
 		return
 
-	var input_axis: float = Input.get_axis("walk_left", "walk_right")
-	var is_air_control_locked: bool = _air_control_lock_timer > 0.0
-	if _air_control_lock_timer > 0.0:
-		_air_control_lock_timer = maxf(_air_control_lock_timer - delta, 0.0)
-
 	var on_floor: bool = _player.is_on_floor()
 	var just_landed: bool = on_floor and not _was_on_floor
+	if _hit_air_control_locked and not on_floor:
+		_hit_air_control_was_airborne = true
+	elif _hit_air_control_locked and _hit_air_control_was_airborne and on_floor:
+		_hit_air_control_locked = false
+		_hit_air_control_was_airborne = false
+
+	var input_axis: float = Input.get_axis("walk_left", "walk_right")
 
 	_update_timers(delta, on_floor)
-	if not is_air_control_locked:
+	if _can_unlock_hit_air_control_for_jump(on_floor):
+		_unlock_hit_air_control()
+
+	if not _hit_air_control_locked:
 		_update_facing(input_axis)
 	_update_crouch(delta, on_floor, just_landed)
-	if not is_air_control_locked:
+	if not _hit_air_control_locked:
 		_apply_horizontal_movement(input_axis, delta, on_floor)
 	_apply_jump()
 	_apply_gravity(delta)
@@ -68,10 +75,13 @@ func is_crouching() -> bool:
 	return _crouching
 
 
-func start_hit_reaction(launch_velocity: Vector2, air_control_lock_time: float) -> void:
+func start_hit_reaction(launch_direction_sign: float) -> void:
 	_clear_control_state()
-	_player.velocity = launch_velocity
-	_air_control_lock_timer = maxf(air_control_lock_time, 0.0)
+	var launch_strength: float = maxf(hit_launch_strength, 0.0)
+	_player.velocity = Vector2(launch_strength * launch_direction_sign, -launch_strength)
+	_remaining_air_jumps = _get_available_air_jumps()
+	_hit_air_control_locked = true
+	_hit_air_control_was_airborne = false
 
 
 func _apply_dead_movement(delta: float) -> void:
@@ -213,6 +223,21 @@ func _can_use_slide_jump_bonus() -> bool:
 	return _sliding and _slide_timer < bonus_end_time
 
 
+func _can_unlock_hit_air_control_for_jump(on_floor: bool) -> bool:
+	if not _hit_air_control_locked:
+		return false
+	if _jump_buffer_timer <= 0.0 or max_jumps <= 0:
+		return false
+	if _crouching and not _sliding:
+		return false
+
+	var can_use_ground_jump: bool = on_floor and _player.velocity.y < 0.0
+	if can_use_ground_jump:
+		return true
+
+	return _remaining_air_jumps > 0
+
+
 func _stop_slide() -> void:
 	_sliding = false
 	_slide_timer = 0.0
@@ -224,4 +249,9 @@ func _clear_control_state() -> void:
 	_coyote_timer = 0.0
 	_jump_buffer_timer = 0.0
 	_remaining_air_jumps = 0
-	_air_control_lock_timer = 0.0
+	_unlock_hit_air_control()
+
+
+func _unlock_hit_air_control() -> void:
+	_hit_air_control_locked = false
+	_hit_air_control_was_airborne = false

@@ -39,18 +39,16 @@ animations = [{
 [node name="BurningCampfire" type="Node2D" unique_id=2075658161]
 script = ExtResource("1_x6b4a")
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="Hitbox" type="Area2D" parent="." unique_id=285439776]
 collision_layer = 32
-collision_mask = 1
 script = ExtResource("2_hitbox")
-damage = 10.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1965249777]
 position = Vector2(0, 1)
 shape = SubResource("CircleShape2D_x6b4a")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=665599641]
-self_modulate = Color(1.8247963, 1.8247963, 1.8247963, 1)
+self_modulate = Color(3.0973105, 3.0973105, 3.0973105, 1)
 sprite_frames = SubResource("SpriteFrames_x6b4a")
 autoplay = "default"
 frame_progress = 0.5882298

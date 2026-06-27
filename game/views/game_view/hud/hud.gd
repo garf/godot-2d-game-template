@@ -56,5 +56,5 @@ func _on_player_died() -> void:
 	_dead_screen.visible = true
 
 
-func _on_player_respawned(_global_position: Vector2) -> void:
+func _on_player_respawned(_spawn_global_position: Vector2) -> void:
 	_dead_screen.visible = false

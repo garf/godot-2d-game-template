@@ -9,6 +9,10 @@ shader = ExtResource("2_xtpaf")
 shader_parameter/outerRadius = 1.0
 shader_parameter/MainAlpha = 0.6810000323475
 
+[sub_resource type="Environment" id="Environment_gmir5"]
+background_mode = 3
+glow_enabled = true
+
 [node name="Main" type="Node" unique_id=577680494]
 script = ExtResource("1_oa506")
 
@@ -30,3 +34,6 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1915648820]
+environment = SubResource("Environment_gmir5")

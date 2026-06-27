@@ -3,9 +3,7 @@ class_name Player extends CharacterBody2D
 
 signal facing_direction_changed(facing_direction: Vector2)
 
-const HIT_FLASH_TIME: float = 0.08
-const HIT_KNOCKBACK_VELOCITY: float = 240.0
-const HIT_AIR_CONTROL_LOCK_TIME: float = 0.16
+const HIT_FLASH_TIME: float = 0.1
 
 var facing_sign: int = 1
 var facing_direction: Vector2 = Vector2.RIGHT
@@ -81,8 +79,8 @@ func die() -> void:
 	_vitals_controller.die()
 
 
-func respawn(global_position: Vector2) -> void:
-	_vitals_controller.respawn(global_position)
+func respawn(spawn_global_position: Vector2) -> void:
+	_vitals_controller.respawn(spawn_global_position)
 
 
 func is_alive() -> bool:
@@ -127,10 +125,7 @@ func _play_hit_reaction(source_position: Vector2) -> void:
 
 	_play_animation(&"hit_right", true)
 	_flash_hit_shader()
-	_movement_controller.start_hit_reaction(
-		Vector2(HIT_KNOCKBACK_VELOCITY * away_sign, -HIT_KNOCKBACK_VELOCITY),
-		HIT_AIR_CONTROL_LOCK_TIME
-	)
+	_movement_controller.start_hit_reaction(away_sign)
 
 
 func _flash_hit_shader() -> void:
@@ -170,7 +165,7 @@ func _on_player_died() -> void:
 	_stop_camera_following()
 
 
-func _on_player_respawned(_global_position: Vector2) -> void:
+func _on_player_respawned(_spawn_global_position: Vector2) -> void:
 	_hit_flash_id += 1
 	_set_hit_shader_active(false)
 	_restore_camera_following()
