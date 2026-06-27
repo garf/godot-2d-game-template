@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dsiv7tspf2eel" path="res://game/entities/characters/player/player.gd" id="1_ruxbf"]
 [ext_resource type="Texture2D" uid="uid://m4ubf65w3du2" path="res://assets/art/Heroes-Medium.png" id="2_cetcc"]
+[ext_resource type="Script" path="res://game/entities/characters/player/player_movement_controller.gd" id="3_8es8j"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tmnli"]
 atlas = ExtResource("2_cetcc")
@@ -151,9 +152,10 @@ script = ExtResource("1_ruxbf")
 [node name="PlayerSprites" type="AnimatedSprite2D" parent="." unique_id=1379412176]
 position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_ruxbf")
-animation = &"hit_right"
-frame = 2
-frame_progress = 1.0
+animation = &"idle_right"
+
+[node name="MovementController" type="Node" parent="."]
+script = ExtResource("3_8es8j")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1979362243]
 position = Vector2(0, -3)
