@@ -38,6 +38,7 @@ This file is the working map for agents touching this project. Keep it short, fa
 
 - [game/main.tscn](game/main.tscn) is the root scene. It owns `Main`, `PixelViewportContainer`, `ViewLoader`, high-resolution `HUD`, and vignette post-processing.
 - `PixelViewportContainer` displays `WorldViewport`, which renders gameplay through `WorldRoot` at an effective 480x270 pixel-art resolution and integer-scales it to the window.
+- Pixel-art rendering uses nearest filtering, transform snapping, and no vertex snapping for `WorldViewport`; keep this combination unless replacing the low-resolution viewport strategy.
 - `Main` emits `Events.VIEW_load_view` on startup instead of instantiating the main view directly.
 - `Main` currently loads `ViewDb.Keys.GAME`.
 - `ViewLoader` listens to view events, owns a persistent high-resolution `LoadingView`, uses `ResourceLoader.load_threaded_request`, inserts the requested gameplay scene into its configured content parent, and emits `Events.VIEW_view_loaded` after insertion.

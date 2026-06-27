@@ -3,9 +3,11 @@ class_name Main extends Node
 const GAME_VIEWPORT_SIZE: Vector2i = Vector2i(480, 270)
 
 @onready var _pixel_viewport_container: SubViewportContainer = %PixelViewportContainer
+@onready var _world_viewport: SubViewport = %WorldViewport
 
 
 func _ready() -> void:
+	_configure_pixel_rendering()
 	_pixel_viewport_container.stretch = true
 	_update_pixel_viewport_layout()
 	get_viewport().size_changed.connect(_update_pixel_viewport_layout)
@@ -20,6 +22,16 @@ func load_game_view() -> void:
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed(&'ui_cancel'):
 		get_tree().quit()
+
+
+func _configure_pixel_rendering() -> void:
+	_pixel_viewport_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_world_viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
+	_world_viewport.canvas_item_default_texture_repeat = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_REPEAT_DISABLED
+
+	var world_viewport_rid: RID = _world_viewport.get_viewport_rid()
+	RenderingServer.viewport_set_snap_2d_transforms_to_pixel(world_viewport_rid, true)
+	RenderingServer.viewport_set_snap_2d_vertices_to_pixel(world_viewport_rid, false)
 
 
 func _update_pixel_viewport_layout() -> void:

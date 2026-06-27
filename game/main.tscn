@@ -34,8 +34,6 @@ unique_name_in_owner = true
 script = ExtResource("2_emt18")
 content_parent_path = NodePath("../PixelViewportContainer/WorldViewport/WorldRoot")
 
-[node name="HUD" parent="." unique_id=937081481 instance=ExtResource("3_hud")]
-
 [node name="PostProcessing" type="CanvasLayer" parent="." unique_id=128169698]
 
 [node name="Vignette" type="ColorRect" parent="PostProcessing" unique_id=2024128585]
@@ -47,3 +45,5 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="HUD" parent="." unique_id=937081481 instance=ExtResource("3_hud")]
