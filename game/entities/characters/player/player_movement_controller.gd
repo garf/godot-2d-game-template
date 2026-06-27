@@ -35,6 +35,13 @@ var _was_on_floor: bool = false
 
 
 func physics_update(delta: float) -> void:
+	if _player.is_dead():
+		_clear_control_state()
+		_apply_gravity(delta)
+		_player.move_and_slide()
+		_was_on_floor = _player.is_on_floor()
+		return
+
 	var input_axis: float = Input.get_axis("walk_left", "walk_right")
 	var on_floor: bool = _player.is_on_floor()
 	var just_landed: bool = on_floor and not _was_on_floor
@@ -185,3 +192,11 @@ func _can_use_slide_jump_bonus() -> bool:
 func _stop_slide() -> void:
 	_sliding = false
 	_slide_timer = 0.0
+
+
+func _clear_control_state() -> void:
+	_crouching = false
+	_stop_slide()
+	_coyote_timer = 0.0
+	_jump_buffer_timer = 0.0
+	_remaining_air_jumps = 0

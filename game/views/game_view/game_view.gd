@@ -4,6 +4,8 @@ const GAME_VIEWPORT_SIZE: Vector2i = Vector2i(480, 270)
 
 @onready var _pixel_viewport_container: SubViewportContainer = %PixelViewportContainer
 @onready var _world_viewport: SubViewport = %WorldViewport
+@onready var _player: Player = $PixelViewportContainer/WorldViewport/WorldRoot/Player
+@onready var _respawn_point: Marker2D = $PixelViewportContainer/WorldViewport/WorldRoot/ForestMap/RespawnPoint
 
 
 func _ready() -> void:
@@ -11,12 +13,22 @@ func _ready() -> void:
 	_pixel_viewport_container.stretch = true
 	_update_pixel_viewport_layout()
 	get_viewport().size_changed.connect(_update_pixel_viewport_layout)
+	_request_player_respawn()
 	#MusicPlayer.play_file(MusicDb.Keys.DAISY_DANCE, true)
 
 
 func _exit_tree() -> void:
 	if get_viewport().size_changed.is_connected(_update_pixel_viewport_layout):
 		get_viewport().size_changed.disconnect(_update_pixel_viewport_layout)
+
+
+func _process(_delta: float) -> void:
+	if _player.is_dead() and Input.is_action_just_pressed("restart"):
+		_request_player_respawn()
+
+
+func _request_player_respawn() -> void:
+	Events.PLAYER_respawn_requested.emit(_respawn_point.global_position)
 
 
 func _configure_pixel_rendering() -> void:

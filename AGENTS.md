@@ -51,6 +51,7 @@ This file is the working map for agents touching this project. Keep it short, fa
   - `PixelViewportContainer/WorldViewport/WorldRoot/ForestMap`
   - `PixelViewportContainer/WorldViewport/WorldRoot/Player`
   - `HUD`
+- Player vitals are local to the player scene. `PlayerVitalsController` owns alive/dead state, wraps `HpComp`, and emits player vitals events. `GameView` owns initial spawn and restart respawn requests because it has both the player and map `RespawnPoint`.
 
 ## Current Code Patterns
 
@@ -60,10 +61,11 @@ This file is the working map for agents touching this project. Keep it short, fa
 - Signal names are namespaced by domain prefix, for example:
   - `VIEW_*`
   - `WALLET_*`
-- These are the only current event domains.
+  - `PLAYER_*`
 - Prefer adding a domain-specific signal to `Events` for decoupled communication instead of hard references between unrelated nodes.
 - Wallet changes use wallet events: spend requests use `WALLET_money_spend_requested`, sync requests use `WALLET_sync_requested`, and UI sync uses `WALLET_money_changed`.
 - View loading completion uses `VIEW_view_loaded`; high-resolution UI that depends on gameplay-local managers should wait for this signal before requesting sync.
+- Player vitals use player events for HP changes, death requests, death completion, respawn requests, and respawn completion.
 
 ### DB Registry Pattern
 
@@ -82,6 +84,7 @@ This file is the working map for agents touching this project. Keep it short, fa
 - UI and scene scripts use `%UniqueNodeName` lookups for important child nodes when the scene marks them `unique_name_in_owner = true`.
 - Full-viewport `Control` nodes under `CanvasLayer` must use full-rect layout metadata (`layout_mode = 3` plus anchors) so text controls get valid geometry during scene insertion.
 - Player locomotion uses composition: `Player` owns public facing/animation API, while a child `PlayerMovementController` owns velocity physics and `move_and_slide()`. Future directional gameplay should read `Player.facing_direction`, not sprite flip state.
+- Player vitals use composition: `PlayerVitalsController` owns HP and alive/dead state. Dead players keep gravity and `move_and_slide()` but ignore movement input.
 - `HpComp` is a reusable component with local `hp_changed` and `hp_depleted` signals.
 
 ### Resources and Data
@@ -102,6 +105,7 @@ This file is the working map for agents touching this project. Keep it short, fa
 - Shared UI lives under `ui/`; game-specific UI lives with the owning game view.
 - `ui/theme.tres` is the project-wide `Control` theme via `project.godot` and owns the default Pixel Operator font.
 - Game HUD lives under `game/views/game_view/hud/`, is event-driven, and lives outside the low-resolution gameplay viewport. It requests wallet sync after the game view reports loaded, then renders values from wallet events.
+- HUD HP and death UI listen to player vitals events. `DeadScreen` is hidden by default, shown on player death, and hidden on respawn.
 
 ### Localization
 

@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://bvosiiu3754y0"]
 
 [ext_resource type="TileSet" uid="uid://boniaau7ima42" path="res://game/tilesets/forest_tileset.tres" id="1_jpomo"]
+[ext_resource type="Script" path="res://game/levels/forest_level/forest_map.gd" id="2_forest_map"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_gmir5"]
 
@@ -9,6 +10,7 @@ tile_map_data = PackedByteArray("AAAFAA8AAAAAAAAAAAAGAA8AAAAAAAAAAAAHAA8AAAAAAAA
 tile_set = ExtResource("1_jpomo")
 rendering_quadrant_size = 8
 physics_quadrant_size = 8
+script = ExtResource("2_forest_map")
 
 [node name="KillZone" type="Area2D" parent="." unique_id=591235494]
 unique_name_in_owner = true

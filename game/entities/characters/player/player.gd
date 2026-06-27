@@ -8,6 +8,20 @@ var facing_direction: Vector2 = Vector2.RIGHT
 
 @onready var _sprite: AnimatedSprite2D = $PlayerSprites
 @onready var _movement_controller: PlayerMovementController = $MovementController
+@onready var _vitals_controller: PlayerVitalsController = $VitalsController
+@onready var _camera: Camera2D = $Camera2D
+
+
+func _enter_tree() -> void:
+	Events.PLAYER_died.connect(_on_player_died)
+	Events.PLAYER_respawned.connect(_on_player_respawned)
+
+
+func _exit_tree() -> void:
+	if Events.PLAYER_died.is_connected(_on_player_died):
+		Events.PLAYER_died.disconnect(_on_player_died)
+	if Events.PLAYER_respawned.is_connected(_on_player_respawned):
+		Events.PLAYER_respawned.disconnect(_on_player_respawned)
 
 
 func _ready() -> void:
@@ -17,6 +31,9 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	_movement_controller.physics_update(delta)
+	if is_dead():
+		return
+
 	_update_animation()
 
 
@@ -38,6 +55,26 @@ func set_facing_sign(value: int) -> void:
 
 func get_facing_direction() -> Vector2:
 	return facing_direction
+
+
+func receive_damage(amount: float) -> float:
+	return _vitals_controller.receive_damage(amount)
+
+
+func die() -> void:
+	_vitals_controller.die()
+
+
+func respawn(global_position: Vector2) -> void:
+	_vitals_controller.respawn(global_position)
+
+
+func is_alive() -> bool:
+	return _vitals_controller.is_alive()
+
+
+func is_dead() -> bool:
+	return _vitals_controller.is_dead()
 
 
 func _sync_facing_visuals() -> void:
@@ -62,3 +99,25 @@ func _play_animation(animation: StringName) -> void:
 		return
 
 	_sprite.play(animation)
+
+
+func _stop_camera_following() -> void:
+	var camera_global_position: Vector2 = _camera.global_position
+	_camera.top_level = true
+	_camera.global_position = camera_global_position
+
+
+func _restore_camera_following() -> void:
+	_camera.top_level = false
+	_camera.position = Vector2.ZERO
+
+
+func _on_player_died() -> void:
+	_play_animation(&"death_right")
+	_stop_camera_following()
+
+
+func _on_player_respawned(_global_position: Vector2) -> void:
+	_restore_camera_following()
+	_sync_facing_visuals()
+	_play_animation(&"idle_right")

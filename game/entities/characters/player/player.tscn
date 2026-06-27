@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://dsiv7tspf2eel" path="res://game/entities/characters/player/player.gd" id="1_ruxbf"]
 [ext_resource type="Texture2D" uid="uid://m4ubf65w3du2" path="res://assets/art/Heroes-Medium.png" id="2_cetcc"]
 [ext_resource type="Script" path="res://game/entities/characters/player/player_movement_controller.gd" id="3_8es8j"]
+[ext_resource type="Script" path="res://game/entities/characters/player/player_vitals_controller.gd" id="4_vitals"]
+[ext_resource type="Script" path="res://game/components/hp/hp_comp.gd" id="5_hp"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tmnli"]
 atlas = ExtResource("2_cetcc")
@@ -156,6 +158,12 @@ animation = &"idle_right"
 
 [node name="MovementController" type="Node" parent="."]
 script = ExtResource("3_8es8j")
+
+[node name="VitalsController" type="Node" parent="."]
+script = ExtResource("4_vitals")
+
+[node name="HpComp" type="Node" parent="VitalsController"]
+script = ExtResource("5_hp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1979362243]
 position = Vector2(0, -3)

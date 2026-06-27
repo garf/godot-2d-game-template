@@ -1,49 +1,41 @@
 class_name HpComp extends Node
 
 signal hp_depleted
-signal hp_changed
+signal hp_changed(current_hp: float, old_hp: float)
 
 @export var max_hp: float = 4.0: set = set_max_hp
 @export var hp: float = 4.0: set = set_hp
 
 
 func deal_damage(amount: float) -> float:
-	var old_value = hp
-	hp -= amount
-	hp_changed.emit(hp, old_value)
-	if hp <= 0.0:
-		hp_depleted.emit()
-
+	set_hp(hp - amount)
 	return hp
 
 
 func heal(amount: float) -> float:
-	var old_value = hp
-	hp += amount
-	hp = min(hp, max_hp)
-	hp_changed.emit(hp, old_value)
+	set_hp(hp + amount)
 	return hp
 
 
 func heal_full() -> float:
-	var old_value = hp
-	hp = max_hp
-	hp_changed.emit(hp, old_value)
+	set_hp(max_hp)
 	return hp
 
 
 func set_max_hp(amount: float) -> void:
-	var old_value = hp
-	max_hp = amount
-	hp = min(hp, amount)
+	var old_value: float = hp
+	max_hp = maxf(amount, 0.0)
+	hp = clampf(hp, 0.0, max_hp)
 	hp_changed.emit(hp, old_value)
+	if old_value > 0.0 and hp <= 0.0:
+		hp_depleted.emit()
 
 
 func set_hp(amount: float) -> void:
-	var old_value = hp
-	hp = min(max_hp, amount)
+	var old_value: float = hp
+	hp = clampf(amount, 0.0, max_hp)
 	hp_changed.emit(hp, old_value)
-	if hp <= 0.0:
+	if old_value > 0.0 and hp <= 0.0:
 		hp_depleted.emit()
 
 
