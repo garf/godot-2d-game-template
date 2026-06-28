@@ -24,9 +24,11 @@ func heal_full() -> float:
 
 func set_max_hp(amount: float) -> void:
 	var old_value: float = hp
+	var old_max_hp: float = max_hp
 	max_hp = maxf(amount, 0.0)
 	hp = clampf(hp, 0.0, max_hp)
-	hp_changed.emit(hp, old_value)
+	if not is_equal_approx(hp, old_value) or not is_equal_approx(max_hp, old_max_hp):
+		hp_changed.emit(hp, old_value)
 	if old_value > 0.0 and hp <= 0.0:
 		hp_depleted.emit()
 
@@ -34,7 +36,8 @@ func set_max_hp(amount: float) -> void:
 func set_hp(amount: float) -> void:
 	var old_value: float = hp
 	hp = clampf(amount, 0.0, max_hp)
-	hp_changed.emit(hp, old_value)
+	if not is_equal_approx(hp, old_value):
+		hp_changed.emit(hp, old_value)
 	if old_value > 0.0 and hp <= 0.0:
 		hp_depleted.emit()
 

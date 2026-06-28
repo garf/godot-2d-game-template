@@ -4,7 +4,7 @@ const GAME_VIEWPORT_SIZE: Vector2i = Vector2i(480, 270)
 
 @onready var _pixel_viewport_container: SubViewportContainer = %PixelViewportContainer
 @onready var _world_viewport: SubViewport = %WorldViewport
-@onready var _player: Player = $PixelViewportContainer/WorldViewport/WorldRoot/Player
+@onready var _player: Player = %Player
 @onready var _respawn_point: Marker2D = $PixelViewportContainer/WorldViewport/WorldRoot/ForestMap/RespawnPoint
 
 

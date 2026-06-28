@@ -2,6 +2,7 @@
 
 [ext_resource type="TileSet" uid="uid://boniaau7ima42" path="res://game/tilesets/forest_tileset.tres" id="1_jpomo"]
 [ext_resource type="Script" uid="uid://df0wxf5mmp0u0" path="res://game/levels/forest_level/forest_map.gd" id="2_forest_map"]
+[ext_resource type="PackedScene" uid="uid://cbwsdfypyp4if" path="res://game/entities/objects/burning_campfire/burning_campfire.tscn" id="3_nx520"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_gmir5"]
 
@@ -24,3 +25,6 @@ shape = SubResource("WorldBoundaryShape2D_gmir5")
 [node name="RespawnPoint" type="Marker2D" parent="." unique_id=1519053990]
 unique_name_in_owner = true
 position = Vector2(54, 113)
+
+[node name="BurningCampfire" parent="." unique_id=2075658161 instance=ExtResource("3_nx520")]
+position = Vector2(103, 177)

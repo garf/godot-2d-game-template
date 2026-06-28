@@ -16,4 +16,9 @@ const MUSIC_RESOURCE_PATHS := {
 
 
 static func get_music_stream(key: Keys) -> AudioStream:
-	return load(MUSIC_RESOURCE_PATHS.get(key))
+	var stream_path: String = MUSIC_RESOURCE_PATHS.get(key, '')
+	if stream_path.is_empty():
+		push_error("Missing music stream path for key: %s" % Keys.keys()[key])
+		return null
+
+	return load(stream_path) as AudioStream

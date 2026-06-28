@@ -4,6 +4,7 @@ class_name ForestMap extends LevelTileMap
 
 
 func _ready() -> void:
+	super._ready()
 	_kill_zone.body_entered.connect(_on_kill_zone_body_entered)
 
 

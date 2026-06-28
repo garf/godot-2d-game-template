@@ -7,6 +7,12 @@
 [ext_resource type="Script" uid="uid://dbbq74owd33k" path="res://game/entities/characters/player/player_vitals_controller.gd" id="4_vitals"]
 [ext_resource type="Script" uid="uid://dsn5kmelwxa0x" path="res://game/components/hp/hp_comp.gd" id="5_hp"]
 [ext_resource type="Script" uid="uid://blg4ju5g6vxtp" path="res://game/components/hurtbox/hurtbox_comp.gd" id="6_hurtbox"]
+[ext_resource type="Script" uid="uid://3knpwhmbjfk8" path="res://game/entities/characters/player/movement/player_movement_config.gd" id="7_config"]
+[ext_resource type="Script" uid="uid://bd11cbfa23j47" path="res://game/entities/characters/player/movement/player_ground_state.gd" id="8_ground"]
+[ext_resource type="Script" uid="uid://psw8j3h5disv" path="res://game/entities/characters/player/movement/player_air_state.gd" id="9_air"]
+[ext_resource type="Script" uid="uid://bufkmrikohf06" path="res://game/entities/characters/player/movement/player_climb_state.gd" id="10_climb"]
+[ext_resource type="Script" uid="uid://bji24mtmx8jmg" path="res://game/entities/characters/player/movement/player_hit_stun_state.gd" id="11_hit_stun"]
+[ext_resource type="Script" uid="uid://cq3shvrp3vnbe" path="res://game/entities/characters/player/movement/player_dead_state.gd" id="12_dead"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_06c3x"]
 shader = ExtResource("1_06c3x")
@@ -184,6 +190,13 @@ animations = [{
 "speed": 14.0
 }]
 
+[sub_resource type="Resource" id="PlayerMovementConfig_8es8j"]
+script = ExtResource("7_config")
+jump_velocity = -230.0
+max_jumps = 4
+slide_speed_multiplier = 1.45
+slide_jump_velocity_multiplier = 1.25
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_gmir5"]
 radius = 3.0
 
@@ -200,10 +213,22 @@ autoplay = "idle_right"
 
 [node name="MovementController" type="Node" parent="." unique_id=918236918]
 script = ExtResource("3_8es8j")
-jump_velocity = -230.0
-max_jumps = 4
-slide_speed_multiplier = 1.45
-slide_jump_velocity_multiplier = 1.25
+config = SubResource("PlayerMovementConfig_8es8j")
+
+[node name="GroundState" type="Node" parent="MovementController" unique_id=1500632346]
+script = ExtResource("8_ground")
+
+[node name="AirState" type="Node" parent="MovementController" unique_id=930876685]
+script = ExtResource("9_air")
+
+[node name="ClimbState" type="Node" parent="MovementController" unique_id=1675804315]
+script = ExtResource("10_climb")
+
+[node name="HitStunState" type="Node" parent="MovementController" unique_id=1297432950]
+script = ExtResource("11_hit_stun")
+
+[node name="DeadState" type="Node" parent="MovementController" unique_id=159854952]
+script = ExtResource("12_dead")
 
 [node name="VitalsController" type="Node" parent="." unique_id=1933421795]
 script = ExtResource("4_vitals")

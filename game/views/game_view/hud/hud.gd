@@ -4,6 +4,8 @@ class_name HudUi extends CanvasLayer
 @onready var _hp_progress_bar: ProgressBar = %HpProgressBar
 @onready var _dead_screen: MarginContainer = %DeadScreen
 
+var _money_tween: Tween = null
+
 
 func _enter_tree() -> void:
 	Events.WALLET_money_changed.connect(_on_money_changed)
@@ -38,13 +40,21 @@ func _on_view_loaded(view: ViewDb.Keys) -> void:
 
 
 func _on_money_changed(amount: int, old_amount: int) -> void:
-	var tween: Tween = create_tween().set_trans(Tween.TRANS_EXPO)
-	tween.tween_method(_render_money, old_amount, amount, 1.5)
+	if _money_tween != null and _money_tween.is_valid():
+		_money_tween.kill()
+
+	_money_tween = create_tween().set_trans(Tween.TRANS_EXPO)
+	_money_tween.tween_method(_render_money, old_amount, amount, 1.5)
+	_money_tween.finished.connect(_clear_money_tween)
 
 
 ## Method for a tween, to produce an amount change animation
 func _render_money(amount: int) -> void:
 	money_value_label.text = str(amount)
+
+
+func _clear_money_tween() -> void:
+	_money_tween = null
 
 
 func _on_player_hp_changed(current_hp: float, max_hp: float, _old_hp: float) -> void:

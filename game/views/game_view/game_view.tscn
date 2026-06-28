@@ -33,6 +33,7 @@ unique_name_in_owner = true
 [node name="ForestMap" parent="PixelViewportContainer/WorldViewport/WorldRoot" unique_id=471935757 instance=ExtResource("3_oa5ip")]
 
 [node name="Player" parent="PixelViewportContainer/WorldViewport/WorldRoot" unique_id=1859496224 instance=ExtResource("5_oa5ip")]
+unique_name_in_owner = true
 position = Vector2(50, 104)
 climb_map_path = NodePath("../ForestMap")
 

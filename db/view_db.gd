@@ -12,8 +12,16 @@ const VIEW_SCENE_PATHS := {
 
 
 static func get_view_scene(key: Keys) -> PackedScene:
-	return load(VIEW_SCENE_PATHS.get(key))
+	var scene_path: String = get_view_scene_path(key)
+	if scene_path.is_empty():
+		return null
+
+	return load(scene_path) as PackedScene
 
 
 static func get_view_scene_path(key: Keys) -> String:
-	return VIEW_SCENE_PATHS.get(key)
+	var scene_path: String = VIEW_SCENE_PATHS.get(key, '')
+	if scene_path.is_empty():
+		push_error("Missing view scene path for key: %s" % Keys.keys()[key])
+
+	return scene_path
