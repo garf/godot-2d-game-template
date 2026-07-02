@@ -192,10 +192,9 @@ animations = [{
 
 [sub_resource type="Resource" id="PlayerMovementConfig_8es8j"]
 script = ExtResource("7_config")
-jump_velocity = -230.0
-max_jumps = 4
 slide_speed_multiplier = 1.45
 slide_jump_velocity_multiplier = 1.25
+slide_flat_time = 0.4
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gmir5"]
 radius = 3.0

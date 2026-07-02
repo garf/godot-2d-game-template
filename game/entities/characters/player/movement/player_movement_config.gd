@@ -10,6 +10,7 @@ class_name PlayerMovementConfig extends Resource
 @export var gravity: float = 950.0
 @export var fall_gravity: float = 1250.0
 @export var max_fall_speed: float = 700.0
+@export var floor_snap_length: float = 4.0
 @export var coyote_time: float = 0.10
 @export var jump_buffer_time: float = 0.10
 @export var jump_cut_multiplier: float = 0.45

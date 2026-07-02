@@ -29,6 +29,7 @@ var _state: PlayerMovementState = null
 
 
 func _ready() -> void:
+	_player.floor_snap_length = maxf(config.floor_snap_length, 0.0)
 	for child: Node in get_children():
 		var movement_state: PlayerMovementState = child as PlayerMovementState
 		if movement_state != null:
